@@ -67,7 +67,9 @@ def get_hash(access_token, membershipID):
     print('4')
     for a in vaultHashes:
         if len(a) > 11:
-            itemHashes.append(a['itemHash'])
+            tempDict = [a['itemInstanceId'],a["itemHash"]]
+            print(tempDict)
+            itemHashes.append(tempDict)
     with open('vault.json', 'w') as f:
         json.dump(itemHashes, f, ensure_ascii=False, indent=4)
         get_name(itemHashes)
@@ -75,11 +77,12 @@ def get_hash(access_token, membershipID):
 
 def get_name(itemHashes):
     for i in itemHashes:
-        url = 'https://www.bungie.net/Platform/Destiny2/Manifest/DestinyInventoryItemDefinition/' + str(i) + '/'
+        url = 'https://www.bungie.net/Platform/Destiny2/Manifest/DestinyInventoryItemDefinition/' + str(i[1]) + '/'
         HEADERS = {'X-API-Key': 'df73c07453de46fd89ec7b77312169a1'}
         res = requests.get(url, headers=HEADERS)
         names = res.json()
         print(names["Response"]["displayProperties"]["name"])
+
 
 
 def get_item(access_token, membershipID):
@@ -90,6 +93,7 @@ def get_item(access_token, membershipID):
     weaponInfo = []
     print("wow")
     for a in vaultItems:
+
         url = f"https://www.bungie.net/Platform/Destiny2/3/Profile/{membershipID}/Item/{a}/?components=300,302,307"
         weaponSpecific = requests.get(url, headers=HEADERS)
         weapon = weaponSpecific.json()
