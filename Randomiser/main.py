@@ -2,10 +2,12 @@ import urllib.parse
 import json
 import requests
 from flask import Flask, render_template, session, abort, redirect, request, url_for
+global apiKey
 
 app = Flask(__name__)
 app.config
 
+apiKey = 'df73c07453de46fd89ec7b77312169a1'
 client_id = "35598"
 client_secret = 'ptmCr9oGGAkp8a35JZcxzLDmX7Tn1vfXMOeCPlX.E2w'
 
@@ -51,12 +53,13 @@ def get_membership(access_token):
     mem = requests.get(url, headers=HEADERS)
     membershipID = mem.json()['Response']['destinyMemberships'][0]['membershipId']
     print(membershipID)
-    test_response(access_token, membershipID)
+    get_hash(access_token, membershipID)
 
 
-def get_hash(access_token):
+def get_hash(access_token, membershipID):
+    global apiKey
     testurl = f'https://www.bungie.net/Platform/Destiny2/3/Profile/{membershipID}/?components=102,302'
-    HEADERS = {'X-API-Key': 'df73c07453de46fd89ec7b77312169a1', 'Authorization': 'Bearer ' + access_token}
+    HEADERS = {'X-API-Key': apiKey, 'Authorization': 'Bearer ' + access_token}
     res = requests.get(testurl, headers=HEADERS)
     vault = res.json()
     # print(vault)
