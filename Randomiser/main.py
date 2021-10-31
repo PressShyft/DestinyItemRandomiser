@@ -40,13 +40,22 @@ def get_token(code):
     tokens = json.loads(response.text)
     access_token = tokens['access_token']
     print(access_token)
-    print('3')
 
-    get_hash(access_token)
+    get_membership(access_token)
+
+
+def get_membership(access_token):
+    global apiKey
+    url = "https://www.bungie.net/Platform/User/GetMembershipsForCurrentUser/"
+    HEADERS = {'X-API-Key': apiKey, 'Authorization': 'Bearer ' + access_token}
+    mem = requests.get(url, headers=HEADERS)
+    membershipID = mem.json()['Response']['destinyMemberships'][0]['membershipId']
+    print(membershipID)
+    test_response(access_token, membershipID)
 
 
 def get_hash(access_token):
-    testurl = 'https://www.bungie.net/Platform/Destiny2/3/Profile/4611686018487036670/?components=102,302'
+    testurl = f'https://www.bungie.net/Platform/Destiny2/3/Profile/{membershipID}/?components=102,302'
     HEADERS = {'X-API-Key': 'df73c07453de46fd89ec7b77312169a1', 'Authorization': 'Bearer ' + access_token}
     res = requests.get(testurl, headers=HEADERS)
     vault = res.json()
@@ -68,6 +77,22 @@ def get_name(itemHashes):
         res = requests.get(url, headers=HEADERS)
         names = res.json()
         print(names["Response"]["displayProperties"]["name"])
+
+
+def get_item(access_token, membershipID):
+    global apiKey
+    HEADERS = {'X-API-Key': apiKey, 'Authorization': 'Bearer ' + access_token}
+    vaultItemsJson = open("vault.json", "r")
+    vaultItems = json.load(vaultItemsJson)
+    weaponInfo = []
+    print("wow")
+    for a in vaultItems:
+        url = f"https://www.bungie.net/Platform/Destiny2/3/Profile/{membershipID}/Item/{a}/?components=300,302,307"
+        weaponSpecific = requests.get(url, headers=HEADERS)
+        weapon = weaponSpecific.json()
+        weaponInfo.append(weapon)
+        print(weapon)
+    print(weaponInfo)
 
 
 if __name__ == "__main__":
