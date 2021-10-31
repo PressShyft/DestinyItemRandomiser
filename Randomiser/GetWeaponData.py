@@ -38,8 +38,7 @@ async def main(itemHashes):
                               ])
         print(items)
 
-def start(itemHashes):
-    if __name__ == '__main__':
-        loop = asyncio.get_event_loop()
-        loop.run_until_complete(main(itemHashes))
+async def start(itemHashes):
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(main(itemHashes))
 

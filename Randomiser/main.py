@@ -2,6 +2,7 @@ import urllib.parse
 import json
 import requests
 from flask import Flask, render_template, session, abort, redirect, request, url_for
+import GetWeaponData
 global apiKey
 
 app = Flask(__name__)
@@ -72,12 +73,13 @@ def get_hash(access_token, membershipID):
             itemHashes.append(tempDict)
     with open('vault.json', 'w') as f:
         json.dump(itemHashes, f, ensure_ascii=False, indent=4)
-        get_name(itemHashes)
+
+        await GetWeaponData.start(itemHashes)
 
 
 def get_name(itemHashes):
     for i in itemHashes:
-        url = 'https://www.bungie.net/Platform/Destiny2/Manifest/DestinyInventoryItemDefinition/' + str(i[1]) + '/'
+        url = 'https://www.bungie.net/Platform/Destiny2/Manifest/DestinyInventoryItemasync definition/' + str(i[1]) + '/'
         HEADERS = {'X-API-Key': 'df73c07453de46fd89ec7b77312169a1'}
         res = requests.get(url, headers=HEADERS)
         names = res.json()
