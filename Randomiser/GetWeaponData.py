@@ -3,12 +3,7 @@ import asyncio
 import json
 
 
-header = {'X-API-Key': 'df73c07453de46fd89ec7b77312169a1'}
 
-vaultJson = open("../myTests/vault.json", "r")
-vault = json.load(vaultJson)
-itemURL = []
-items = []
 
 
 
@@ -17,7 +12,12 @@ async def fetch(session, url):
         return await response.json()
 
 
-async def main():
+async def main(itemHashes):
+    header = {'X-API-Key': 'df73c07453de46fd89ec7b77312169a1'}
+
+    vault = itemHashes
+    itemURL = []
+    items = []
     for i in vault:
         itemURL.append(
             'https://www.bungie.net/Platform/Destiny2/Manifest/DestinyInventoryItemDefinition/' + str(i[1]) + '/')
@@ -38,8 +38,8 @@ async def main():
                               ])
         print(items)
 
-
-if __name__ == '__main__':
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(main())
+def start(itemHashes):
+    if __name__ == '__main__':
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(main(itemHashes))
 
