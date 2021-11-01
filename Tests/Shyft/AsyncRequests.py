@@ -5,7 +5,7 @@ import re
 
 header = {'X-API-Key': 'df73c07453de46fd89ec7b77312169a1'}
 
-vaultJson = open("../Randomiser/vault.json", "r")
+vaultJson = open("../../Randomiser/vault.json", "r")
 vault = json.load(vaultJson)
 x = []
 items = []
